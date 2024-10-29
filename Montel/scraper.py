@@ -4,8 +4,9 @@ from datetime import datetime
 import pandas as pd
 import os
 import json
-from Montel_F1_DB import timestamp , article_title , append_url , scrape_and_save,  time_date
+from Montel_F1_DB import timestamp , article_title , append_url ,  time_date
 import urllib3
+from savingtosql import db_scrape_and_save
 
 # just to suppress the warning of SSL certificate verification - VERY ANNOYING WHEN WORKING UNDER KELAG NETWORK
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -45,7 +46,7 @@ urls = [
 
 for url in urls:
     # REQUESTING THE URL
-    eletricity_html = requests.get(url, verify=False)
+    eletricity_html = requests.get(url, verify=True)
     # PARSING THE HTML VIA BEAUTIFULSOUP
     eletricity_topic_soup = BeautifulSoup(eletricity_html.text, 'html.parser')
 
@@ -59,4 +60,4 @@ for url in urls:
     # Function For Appending URLs
     full_urls = append_url(dates, today, titles, links)
     # Function For Scraping And Saving
-    scrape_and_save(full_urls, "C:/Users/z_lame/Desktop/Gleni Test/Download/Montel/")
+    db_scrape_and_save(full_urls, "C:/Users/Z_LAME/Desktop/Crawler/Downloads/Montel")
