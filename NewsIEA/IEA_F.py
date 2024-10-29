@@ -6,7 +6,10 @@ import os
 import json
 import re
 import urllib3
+<<<<<<< HEAD
 import pyodbc
+=======
+>>>>>>> 0ccd8ff1bb7652e5d12956cfd52fc1f95ee596ee
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -28,6 +31,7 @@ def get_url(IEA_soup):
 
 # Function For Scraping And Saving
 def scrape_and_save(url_list, directory):
+<<<<<<< HEAD
             #adding to SQL Server
     conn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};'
         'SERVER=SQLBI01;'
@@ -37,6 +41,8 @@ def scrape_and_save(url_list, directory):
 
 
     # Path to the file where the titles are stored
+=======
+>>>>>>> 0ccd8ff1bb7652e5d12956cfd52fc1f95ee596ee
     titles_file_path = os.path.join(directory, "News_IEA_Titles.json")
 
     # Ensure the directory exists
@@ -51,7 +57,11 @@ def scrape_and_save(url_list, directory):
         existing_titles = []
 
     for url in url_list:
+<<<<<<< HEAD
         response = requests.get(url)
+=======
+        response = requests.get(url, verify=False)
+>>>>>>> 0ccd8ff1bb7652e5d12956cfd52fc1f95ee596ee
         html_content = response.text
         soup = BeautifulSoup(html_content, 'html.parser')
         
@@ -85,15 +95,22 @@ def scrape_and_save(url_list, directory):
         timestamp_element = soup.find('time')
         if timestamp_element:
             timestamp = datetime.strptime(timestamp_element['datetime'], '%Y-%m-%dT%H:%M:%S%z')
+<<<<<<< HEAD
             formatted_timestamp = timestamp.strftime('%Y-%m-%d %H:%M:%S')
         else:
             formatted_timestamp = None
+=======
+            formatted_timestamp = timestamp.strftime('%d-%m-%Y')
+        else:
+            formatted_timestamp = "Timestamp element is missing"
+>>>>>>> 0ccd8ff1bb7652e5d12956cfd52fc1f95ee596ee
 
         # DataFrame to temporarily save
         df = pd.DataFrame({
             'title': [title],
             'subtitle': [subtitle],
             'body': [body],
+<<<<<<< HEAD
             'formatted_timestamp': [formatted_timestamp],
             'source' : 'IEA'
         })
@@ -102,6 +119,11 @@ def scrape_and_save(url_list, directory):
             cursor.execute("INSERT INTO mercurius.Scraper (title, subtitle, body, date, source) VALUES (?, ?, ?, ?,?)",
                            row['title'], row['subtitle'], row['body'], row['formatted_timestamp'], row['source'])
 
+=======
+            'datestamp': [formatted_timestamp]
+        })
+
+>>>>>>> 0ccd8ff1bb7652e5d12956cfd52fc1f95ee596ee
         # Convert DataFrame to JSON
         json_str = df.to_json(orient='records', indent=4)
 
@@ -113,7 +135,11 @@ def scrape_and_save(url_list, directory):
 
     # Update the titles file
     with open(titles_file_path, 'w', encoding='utf-8') as file:
+<<<<<<< HEAD
         json.dump(existing_titles, file, indent=4, ensure_ascii=False)
 
         conn.commit()
         conn.close()
+=======
+        json.dump(existing_titles, file, indent=4, ensure_ascii=False)
+>>>>>>> 0ccd8ff1bb7652e5d12956cfd52fc1f95ee596ee
